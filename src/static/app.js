@@ -19,15 +19,48 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
+        const participantsList = details.participants.length > 0 
+          ? details.participants.map(p => `<li data-email="${p}">${p} <span class="delete-participant" title="Remove">🗑️</span></li>`).join("")
+          : "<li><em>No participants yet</em></li>";
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <div class="participants-section">
+            <strong>Participants:</strong>
+            <ul class="participants-list">
+              ${participantsList}
+            </ul>
+          </div>
         `;
 
         activitiesList.appendChild(activityCard);
+
+        // Add event listeners for delete icons
+        const deleteIcons = activityCard.querySelectorAll('.delete-participant');
+        deleteIcons.forEach((icon) => {
+          icon.addEventListener('click', async (e) => {
+            const li = e.target.closest('li');
+            const email = li.getAttribute('data-email');
+            if (!email) return;
+            if (!confirm(`Unregister ${email} from ${name}?`)) return;
+            try {
+              const response = await fetch(`/activities/${encodeURIComponent(name)}/unregister?email=${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+              });
+              const result = await response.json();
+              if (response.ok) {
+                li.remove();
+              } else {
+                alert(result.detail || 'Failed to unregister participant.');
+              }
+            } catch (err) {
+              alert('Failed to unregister participant.');
+            }
+          });
+        });
 
         // Add option to select dropdown
         const option = document.createElement("option");
@@ -62,6 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        // Refresh activities list to show new participant
+        fetchActivities();
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";

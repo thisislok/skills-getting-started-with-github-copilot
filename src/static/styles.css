@@ -1,3 +1,14 @@
+.delete-participant {
+  cursor: pointer;
+  margin-left: 8px;
+  color: #c62828;
+  font-size: 1em;
+  vertical-align: middle;
+  transition: color 0.2s;
+}
+.delete-participant:hover {
+  color: #ff1744;
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -72,6 +83,37 @@ section h3 {
 
 .activity-card p {
   margin-bottom: 8px;
+}
+
+.participants-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.participants-list {
+  list-style: none;
+  margin-left: 0;
+  margin-top: 8px;
+}
+
+.participants-list li {
+  padding: 6px 0 6px 20px;
+  position: relative;
+  color: #555;
+}
+
+.participants-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.participants-list li em {
+  color: #999;
+  font-style: italic;
 }
 
 .form-group {
