@@ -1,3 +1,14 @@
+.delete-participant {
+  cursor: pointer;
+  margin-left: 8px;
+  color: #c62828;
+  font-size: 1em;
+  vertical-align: middle;
+  transition: color 0.2s;
+}
+.delete-participant:hover {
+  color: #ff1744;
+}
 * {
   box-sizing: border-box;
   margin: 0;
